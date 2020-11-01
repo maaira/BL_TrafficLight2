@@ -38,42 +38,7 @@ void allert();
 void revert_state();
 void reset();
 
-
-void start_button()
-{
-    button_timer = 0;
-    press = true;
-}
-
-void end_button()
-{
-    printf("Botão pressionado por %.3fs\n", button_timer);
-    printf("--------------------------------------------------\n");
-    
-    if (button_timer <= 3 && state == GREEN)
-        yellow();
-    else if (button_timer <= 10)
-    {
-	if (state == ALLERT) revert_state();
-	else allert();
-        
-    }
-    else
-    {
-	if (state == ALLERT) red();
-	else off();
-    }
-    press = false;
-}
-
-void off()
-{
-    reset();
-    printf("State : Off\n");
-    printf("__________________________________________________\n");
-    state = OFF;
-}
-
+//Trafic Light
 void red()
 {
     reset();
@@ -104,9 +69,45 @@ void green()
     timeout.attach(&yellow, 20);
 }
 
-void blinkYellow()
+void blink()
 {
     yellow_ = !yellow_;
+}
+
+//button
+void start_button()
+{
+    button_timer = 0;
+    press = true;
+}
+
+void end_button()
+{
+    printf("Botão pressionado por %.3fs\n----\n", button_timer);
+    if (button_timer <= 3 && state == GREEN)
+        yellow();
+    else if (button_timer <= 10)
+    {
+	if (state == ALLERT) revert_state();
+	else allert();
+        
+    }
+    else
+    {
+	if (state == ALLERT) red();
+	else off();
+    }
+    press = false;
+}
+
+
+
+void off()
+{
+    reset();
+    printf("State : Off\n");
+    printf("__________________________________________________\n");
+    state = OFF;
 }
 
 void allert()
@@ -116,7 +117,7 @@ void allert()
     printf("__________________________________________________\n");
     state_ = state;
     state = ALLERT;
-    ticker.attach(&blinkYellow, 0.5);
+    ticker.attach(&blink, 0.5);
 }
 
 void revert_state()
@@ -159,6 +160,6 @@ int main()
     {
         if (press)
             button_timer += 0.1;
-        wait(0.1);
+        wait(0.2);
     }
 }
